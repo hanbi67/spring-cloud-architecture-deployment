@@ -1,8 +1,8 @@
 spring:
   application:
-    name: cloud-architecture-deployment
-  profiles:
-    default: local
+    name: cloud-architecture-app
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 server:
   port: 8080

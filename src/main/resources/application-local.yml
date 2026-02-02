@@ -23,7 +23,21 @@ spring:
       path: /h2-console
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
   endpoint:
     health:
-      show-details: always
+      show-details: never
+  info:
+    env:
+      enabled: true
+
+# ??? info ??
+info:
+  app:
+    message: "Local Development Team"
+  team:
+    name: "Local Development Team"
 
