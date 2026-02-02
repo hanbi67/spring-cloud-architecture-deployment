@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: cloud-architecture-deployment
+  profiles:
+    default: local
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
