@@ -24,11 +24,18 @@ public class Member {
     @Column(nullable = false)
     private String mbti_type;
 
+    private String profileImageUrl;
+
     public static Member register(String name, Integer age, String mbti_type) {
         Member member = new Member();
         member.name = name;
         member.age = age;
         member.mbti_type = mbti_type;
         return member;
+    }
+
+    // 프로필 이미지 URL 업데이트
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }
