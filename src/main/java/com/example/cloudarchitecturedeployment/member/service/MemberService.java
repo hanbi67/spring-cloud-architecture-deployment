@@ -4,6 +4,7 @@ import com.example.cloudarchitecturedeployment.member.dto.CreateMemberRequest;
 import com.example.cloudarchitecturedeployment.member.dto.CreateMemberResponse;
 import com.example.cloudarchitecturedeployment.member.dto.SearchMemberResponse;
 import com.example.cloudarchitecturedeployment.member.entity.Member;
+import com.example.cloudarchitecturedeployment.member.exception.MemberNotFoundException;
 import com.example.cloudarchitecturedeployment.member.repository.MemberRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public SearchMemberResponse getOne(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("팀원 정보가 존재하지 않습니다")
+                () -> new MemberNotFoundException()
         );
         return SearchMemberResponse.regiser(
                 member.getId(),
@@ -41,6 +42,6 @@ public class MemberService {
                 member.getMbti_type()
         );
     }
-    
+
 
 }
