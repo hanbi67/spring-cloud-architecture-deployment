@@ -4,7 +4,9 @@ import com.example.cloudarchitecturedeployment.member.dto.CreateMemberRequest;
 import com.example.cloudarchitecturedeployment.member.dto.CreateMemberResponse;
 import com.example.cloudarchitecturedeployment.member.dto.SearchMemberResponse;
 import com.example.cloudarchitecturedeployment.member.entity.Member;
+import com.example.cloudarchitecturedeployment.member.exception.FileUploadFailedException;
 import com.example.cloudarchitecturedeployment.member.exception.MemberNotFoundException;
+import com.example.cloudarchitecturedeployment.member.exception.ProfileImageNotFoundException;
 import com.example.cloudarchitecturedeployment.member.repository.MemberRepository;
 import io.awspring.cloud.s3.S3Template;
 import jakarta.validation.Valid;
@@ -62,7 +64,7 @@ public class MemberService {
     @Transactional
     public String upload(Long id, MultipartFile file) {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new MemberNotFoundException()
+                () -> new MemberNotFoundException(id)
         );
         try {
             String key = "uploads/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
@@ -70,17 +72,22 @@ public class MemberService {
             member.updateProfileImageUrl(key);
             return key;
         } catch (IOException e) {
-            // 적절한 커스텀 예외로 바꾸고, GlobalExceptionHandler로 핸들링 필요
-            throw new RuntimeException("파일 업로드 실패", e);
+            throw new FileUploadFailedException(e);
         }
     }
 
-    // 프로필 사진 URL 다운로드
+    // 프로필 사진 Presigned URL 조회
     @Transactional(readOnly = true)
     public  URL getDownloadUrl(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new MemberNotFoundException()
+                () -> new MemberNotFoundException(id)
         );
+
+        // 프로필 이미지 URL 존재 확인
+        if (member.getProfileImageUrl() == null || member.getProfileImageUrl().isEmpty()) {
+            throw new ProfileImageNotFoundException(id);
+        }
+
         return s3Template.createSignedGetURL(bucket, member.getProfileImageUrl(), PRESIGNED_URL_EXPIRATION);
     }
 

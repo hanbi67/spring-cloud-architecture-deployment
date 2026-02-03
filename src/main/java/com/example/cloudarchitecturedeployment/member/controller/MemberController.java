@@ -39,6 +39,7 @@ public class MemberController {
     @PostMapping("/{id}/profile-image")
     public ResponseEntity<UploadImageFileResponse> upload(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         String key = memberService.upload(id, file);
+        log.info("[API - LOG] 프로필 이미지 업로드: id={}, key={}", id, key);
         return ResponseEntity.ok(new UploadImageFileResponse(key));
     }
 
@@ -46,6 +47,7 @@ public class MemberController {
     @GetMapping("/{id}/profile-image")
     public ResponseEntity<FileDownloadUrlResponse> getDownloadUrl(@PathVariable Long id) {
         URL url = memberService.getDownloadUrl(id);
+        log.info("[API - LOG] 프로필 이미지 Presigned URL 조회: id={}, url={}", id, url.toString().replaceAll("https://", ""));
         return ResponseEntity.ok(new FileDownloadUrlResponse(url.toString()));
     }
 
