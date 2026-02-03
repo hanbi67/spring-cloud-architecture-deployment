@@ -46,4 +46,6 @@ https://my-cloud-architecture-leehanbi-files.s3.ap-northeast-2.amazonaws.com/upl
 
 ### 트러블슈팅
 
-<br/>
+https://velog.io/@dlql6717/TIL-CH-4-클라우드아키텍처-설계-배포-과제-트러블슈팅-정리
+
+<br/><br/>
